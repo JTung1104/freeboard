@@ -649,5 +649,36 @@ freeboard.loadDatasourcePlugin({
 	//	createRefreshTimer(currentSettings.refresh_time);
 	}
 
+	var signalpatternDatasource = function(settings, updateCallback) {
+		var self = this;
+		var refreshTimer;
+		var currentSettings = settings;
+
+		var getData = function() {
+		};
+
+		self.onSettingsChanged = function(newSettings) {
+			currentSettings = newSettings;
+		};
+
+		self.updateNow = function() {
+			getData();
+		};
+
+		self.onDispose = function() {
+		};
+
+		function createRefreshTimer(time) {
+			if (refreshTimer) {
+				clearInterval(refreshTimer);
+			}
+			
+			refreshTimer = setInterval(function () {
+				self.updateNow();
+			}, time);
+		}
+
+		createRefreshTimer(currentSettings.refresh_time * 1000);
+	};
 
 }());
